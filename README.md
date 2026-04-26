@@ -93,7 +93,13 @@ git config --global user.name "Your Name"
 git config --global user.email "you@email.com"
 ```
 
-This only needs to be done once per machine.
+Also run this to standardize your default branch name to `master` (matching what Git on Windows typically creates):
+
+```powershell
+git config --global init.defaultBranch master
+```
+
+These only need to be done once per machine.
 
 ---
 
@@ -129,9 +135,13 @@ git add _quarto.yml notebook_01.ipynb pyproject.toml .gitignore README.md
 # Save a snapshot with a message describing what it is
 git commit -m "Initial template commit"
 
-# Push to GitHub and set 'main' as your default branch
-git push -u origin main
+# Push to GitHub
+git push -u origin master
 ```
+
+> **Note:** Git on Windows typically names your local branch `master` by default. The push command above uses `master` to match this. If you ever see the error `src refspec main does not match any`, it means Git used `master` — replace `main` with `master` in the push command and it will work.
+
+> **Note:** During `git add` you may see warnings about `LF will be replaced by CRLF`. This is normal on Windows and can be safely ignored — it refers to line ending formatting and will not affect your files.
 
 After this, your files are on GitHub. You can verify by visiting your repo URL in a browser.
 
