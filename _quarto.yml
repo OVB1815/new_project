@@ -1,0 +1,63 @@
+project:
+  type: default
+
+format:
+  pdf:
+    pdf-engine: xelatex
+    linestretch: 1.25
+
+    # --- Page Setup ---
+    papersize: letter
+    geometry:
+      - top=1in
+      - bottom=1in
+      - left=1in
+      - right=1in
+
+    # --- Fonts ---
+    mainfont: "Calibri"
+    sansfont: "Calibri"
+    monofont: "Courier New"
+    fontsize: 12pt
+
+    # --- Heading Styles ---
+    # Uses titlesec (bundled with TinyTeX) to control H1/H2/H3
+    # To adjust sizes, edit the first number in \fontsize{size}{linespacing}
+    include-in-header:
+      text: |
+        \usepackage{titlesec}
+
+        % H1 — 1.5x body font size, bold, Calibri
+        \titleformat{\section}
+          {\fontsize{18}{22}\normalfont\bfseries}
+          {\thesection}{1em}{}
+
+        % H2 — 1.25x body font size, bold, Calibri
+        \titleformat{\subsection}
+          {\fontsize{15}{19}\normalfont\bfseries}
+          {\thesubsection}{1em}{}
+
+        % H3 — 1.125x body font size, bold, Calibri
+        \titleformat{\subsubsection}
+          {\fontsize{13.5}{17}\normalfont\bfseries}
+          {\thesubsubsection}{1em}{}
+
+    # --- Figures ---
+    fig-width: 3
+    fig-height: 2
+    fig-dpi: 150
+
+    # --- Output Behavior ---
+    number-sections: true
+    number-section-depth: 2
+    toc: false
+    toc-depth: 2
+    colorlinks: true
+    linkcolor: "blue"
+
+# --- Global Execute Defaults ---
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto

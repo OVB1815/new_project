@@ -1,0 +1,39 @@
+[project]
+name = "my_project"
+version = "0.1.0"
+description = "Add project description here"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+
+# --- Always Installed ---
+# Run `uv sync` after copying this template to install these automatically.
+# Launch the notebook with: uv run jupyter notebook
+always = [
+    "jupyter",
+    "ipykernel",
+]
+
+# --- Optional Engineering Packages ---
+# Uncomment the packages needed for this project, then re-run `uv sync`.
+dev = [
+    # --- Core Scientific Stack ---
+    #"numpy",
+    #"pandas",
+    #"scipy",
+    #"sympy",
+    #"matplotlib",
+
+    # --- Engineering Specific ---
+    #"handcalcs",
+    #"forallpeople",
+    #"steelpy",
+    #"PyniteFEA",
+    #"ezweld",
+
+    # --- Data & Files ---
+    #"openpyxl",
+    #"requests",
+    #"beautifulsoup4",
+]
