@@ -1,10 +1,14 @@
 # Ignore everything by default
 *
 
-# Then un-ignore the three template files
+# Then un-ignore the template files
 !_quarto.yml
 !notebook_01.ipynb
 !pyproject.toml
+
+# Environment pinning & reproducibility
+!.python-version
+!uv.lock
 
 # Also track the README and this .gitignore itself
 !README.md
