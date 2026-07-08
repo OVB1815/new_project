@@ -5,10 +5,16 @@ description = "Add project description here"
 requires-python = ">=3.12"
 dependencies = []
 
+# uv only auto-installs its built-in "dev" group on `uv sync`; any other group
+# is skipped unless named here. Listing "always" is what makes uv actually
+# install it, so `uv run jupyter notebook` works after a plain `uv sync`.
+[tool.uv]
+default-groups = ["always", "dev"]
+
 [dependency-groups]
 
 # --- Always Installed ---
-# Run `uv sync` after copying this template to install these automatically.
+# Installed automatically by `uv sync` (see [tool.uv] default-groups above).
 # Launch the notebook with: uv run jupyter notebook
 always = [
     "jupyter",
