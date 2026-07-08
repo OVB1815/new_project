@@ -2,7 +2,14 @@
 name = "my_project"
 version = "0.1.0"
 description = "Add project description here"
-requires-python = ">=3.12"
+
+# Pinned to the Python 3.13 series. PyNite's 3D rendering relies on the
+# pyvista / vtk / trame stack, which is NOT yet compatible with Python 3.14
+# (trame's async server fails under 3.14's event-loop changes, leaving a blank
+# viewer). The .python-version file selects the exact interpreter; this cap is
+# a second guard so no machine ever resolves to 3.14+. To move up later, once
+# the render stack supports it, bump both this line and .python-version.
+requires-python = ">=3.13,<3.14"
 dependencies = []
 
 # uv only auto-installs its built-in "dev" group on `uv sync`; any other group
@@ -35,7 +42,10 @@ dev = [
     #"handcalcs",
     #"forallpeople",
     #"steelpy",
-    #"PyniteFEA",
+    # IMPORTANT: keep the [all] extra. It pulls vtk, pyvista, trame, IPython
+    # and ipywidgets, which PyNite's built-in 3D Renderer requires. Plain
+    # "PyniteFEA" installs the solver only and Renderer imports will fail.
+    #"PyniteFEA[all]",
     #"ezweld",
 
     # --- Data & Files ---

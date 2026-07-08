@@ -23,12 +23,15 @@ Install the following tools before using this template. Each only needs to be in
 
 ## Setting Up a New Project Folder
 
-1. Copy the three template files into a new blank folder:
+1. Copy the template files into a new blank folder:
    ```
    _quarto.yml
    notebook_01.ipynb
    pyproject.toml
+   .python-version
+   uv.lock
    ```
+   > `.python-version` pins the interpreter to Python 3.13; `uv.lock` reproduces the exact package versions. Copying both means the new project starts from the same known-good environment. (`uv.lock` updates automatically when you change which packages are uncommented.)
 
 2. Open a terminal in that folder. In Windows Explorer, click the address bar, type `cmd`, and press Enter.
 
@@ -40,7 +43,20 @@ Install the following tools before using this template. Each only needs to be in
 
 4. To add engineering packages (e.g. `handcalcs`, `forallpeople`), uncomment the relevant lines in `pyproject.toml` under `[dependency-groups] dev`, then re-run `uv sync`. Only uncomment what the specific project needs — this keeps dependencies isolated per project folder.
 
+   > **PyNite + 3D rendering:** uncomment `"PyniteFEA[all]"` — with the `[all]` extra — not plain `"PyniteFEA"`. The extra pulls the pyvista / vtk / trame stack that PyNite's built-in `Renderer` needs. Plain `PyniteFEA` installs only the solver and rendering fails on import.
+
 > **Under the hood:** `uv` only auto-installs its built-in `dev` group on `uv sync`; every other group is skipped unless you name it. The `[tool.uv] default-groups = ["always", "dev"]` line at the top of `pyproject.toml` is what tells `uv` to also install the `always` group (Jupyter + ipykernel) on every sync. Without it, `uv sync` silently skips those packages and `uv run jupyter notebook` fails with `program not found`. If you ever add a new group that should always install, add its name to that list too.
+
+---
+
+## Environment Pinning (why this template won't drift)
+
+Two tracked files keep every project, on every machine, on the same footing:
+
+- **`.python-version`** pins the interpreter to **Python 3.13**. This matters because PyNite's 3D rendering depends on pyvista / vtk / trame, which are **not yet compatible with Python 3.14** — under 3.14 the interactive viewer fails with an asyncio error and shows a blank window. `uv` reads this file and uses 3.13 automatically, downloading it if the machine doesn't have it. The `requires-python = ">=3.13,<3.14"` cap in `pyproject.toml` is a second guard.
+- **`uv.lock`** records the exact resolved version of every package, direct and transitive. Committing it means `uv sync` on any machine reproduces an identical environment instead of re-resolving to whatever is newest. Regenerate deliberately with `uv lock --upgrade` when you *want* to move versions.
+
+To move to a newer Python later (once the render stack supports it), edit `.python-version` and the `requires-python` cap, then run `uv sync`.
 
 ---
 
@@ -82,7 +98,7 @@ quarto preview notebook_01.ipynb
 
 This section explains how to back up your template files to a private GitHub repository and keep them in sync across multiple machines.
 
-Only the three template files are tracked. Generated files (PDFs, `.venv`, cache folders) are excluded via `.gitignore`.
+Only the template source files, the environment pins (`.python-version`, `uv.lock`), the `.gitignore`, and this README are tracked. Generated files (PDFs, `.venv`, cache folders) are excluded via `.gitignore`. Note that `uv.lock` is created by `uv sync`, so run that once before your first commit.
 
 ---
 
@@ -132,7 +148,7 @@ git init
 git remote add origin https://github.com/YOUR_USERNAME/new_project.git
 
 # Stage the files you want to track
-git add _quarto.yml notebook_01.ipynb pyproject.toml .gitignore README.md
+git add _quarto.yml notebook_01.ipynb pyproject.toml .python-version uv.lock .gitignore README.md
 
 # Save a snapshot with a message describing what it is
 git commit -m "Initial template commit"
@@ -199,6 +215,8 @@ new_project/
 ├── _quarto.yml         # Quarto PDF formatting config
 ├── notebook_01.ipynb   # Engineering calculation notebook
 ├── pyproject.toml      # uv dependency config (uncomment packages as needed)
+├── .python-version     # Pins the interpreter to Python 3.13
+├── uv.lock             # Exact resolved package versions (reproducibility)
 ├── .gitignore          # Excludes .venv, PDFs, cache, etc. from git
 └── README.md           # This file
 ```
