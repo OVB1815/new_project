@@ -40,6 +40,8 @@ Install the following tools before using this template. Each only needs to be in
 
 4. To add engineering packages (e.g. `handcalcs`, `forallpeople`), uncomment the relevant lines in `pyproject.toml` under `[dependency-groups] dev`, then re-run `uv sync`. Only uncomment what the specific project needs — this keeps dependencies isolated per project folder.
 
+> **Under the hood:** `uv` only auto-installs its built-in `dev` group on `uv sync`; every other group is skipped unless you name it. The `[tool.uv] default-groups = ["always", "dev"]` line at the top of `pyproject.toml` is what tells `uv` to also install the `always` group (Jupyter + ipykernel) on every sync. Without it, `uv sync` silently skips those packages and `uv run jupyter notebook` fails with `program not found`. If you ever add a new group that should always install, add its name to that list too.
+
 ---
 
 ## Running Jupyter Notebook
