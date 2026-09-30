@@ -12,11 +12,18 @@ description = "Add project description here"
 requires-python = ">=3.13,<3.14"
 dependencies = []
 
+[tool.uv]
 # uv only auto-installs its built-in "dev" group on `uv sync`; any other group
 # is skipped unless named here. Listing "always" is what makes uv actually
 # install it, so `uv run jupyter notebook` works after a plain `uv sync`.
-[tool.uv]
 default-groups = ["always", "dev"]
+
+# Copy packages into .venv instead of hardlinking them from uv's cache.
+# OneDrive (including a OneDrive-redirected Desktop/Documents) rejects
+# hardlinks between synced and non-synced folders, which causes
+# "os error 396 ... incompatible hardlinks" and aborts the install.
+# Copying works everywhere; it only costs a little extra disk space.
+link-mode = "copy"
 
 [dependency-groups]
 
